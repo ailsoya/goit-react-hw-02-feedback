@@ -1,7 +1,6 @@
 /* eslint-disable react/no-direct-mutation-state */
 import { Component } from 'react'
-import { Buttons } from './Feedback/Buttons'
-import { Statistics } from './Feedback/Statistics'
+import { Buttons, Statistics, Section, Notification } from './FeedbackElements'
 
 export class App extends Component {
   static defaultProps  = {
@@ -33,12 +32,10 @@ export class App extends Component {
 
     return (
       <>
-        <div>
-          <h2>Please leave feedback</h2>
+        <Section title="Please leave feedback">
           <Buttons onFeedback={this.handleFeedback}/>
-        </div>
-        <div>
-          <h2>Statistics</h2>
+        </Section>
+        <Section title="Statistics">
           {total > 0 ? (
             <Statistics
               good={good}
@@ -48,9 +45,9 @@ export class App extends Component {
               percentage={totalPercentage}
             />
           ) : (
-            <p>There is no feedback</p>
+            <Notification message="There is no feedback" />
           )}
-        </div>
+        </Section>
       </>
     );
   }
