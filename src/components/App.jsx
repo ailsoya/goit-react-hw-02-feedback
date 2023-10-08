@@ -3,14 +3,10 @@ import { Component } from 'react'
 import { Buttons, Statistics, Section, Notification } from './FeedbackElements'
 
 export class App extends Component {
-  static defaultProps  = {
-    initialValue: 0
-  }
-
   state = {
-    good: this.props.initialValue,
-    neutral: this.props.initialValue,
-    bad: this.props.initialValue,
+    good: 0,
+    neutral: 0,
+    bad: 0,
   }
 
   handleFeedback = (evt) => {
