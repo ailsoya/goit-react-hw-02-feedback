@@ -1,38 +1,55 @@
+/* eslint-disable react/no-direct-mutation-state */
 import { Component } from 'react'
+import { Buttons } from './Feedback/Buttons'
+import { Statistics } from './Feedback/Statistics'
 
 export class App extends Component {
   static defaultProps  = {
-    good: 0,
-    neutral: 0,
-    bad: 0
+    initialValue: 0
   }
 
   state = {
-    good: 0,
-    neutral: 0,
-    bad: 0
+    good: this.props.initialValue,
+    neutral: this.props.initialValue,
+    bad: this.props.initialValue,
+  }
+
+  handleFeedback = (evt) => {
+    this.setState({
+      evt: this.state[evt] += 1,
+    })
+  }
+
+  countPositiveFeedbackPercentage = () => {
+    const { good, neutral, bad } = this.state
+    const total = good + neutral + bad
+    return Math.round((good / total) * 100)
   }
 
   render() {
-    const { good, neutral, bad } = this.state;
+    const { good, neutral, bad } = this.state
+    const total = good + neutral + bad
+    const totalPercentage = this.countPositiveFeedbackPercentage()
 
     return (
       <>
         <div>
           <h2>Please leave feedback</h2>
-          <ul>
-            <li><button type="button" onClick={this.goodClick}>Good</button></li>
-            <li><button type="button">Neutral</button></li>
-            <li><button type="button">Bad</button></li>
-          </ul>
+          <Buttons onFeedback={this.handleFeedback}/>
         </div>
         <div>
           <h2>Statistics</h2>
-          <ul>
-            <li>Good: {good}</li>
-            <li>Neutral: {neutral}</li>
-            <li>Bad: {bad}</li>
-          </ul>
+          {total > 0 ? (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              percentage={totalPercentage}
+            />
+          ) : (
+            <p>There is no feedback</p>
+          )}
         </div>
       </>
     );
