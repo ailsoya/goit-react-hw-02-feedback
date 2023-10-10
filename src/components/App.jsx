@@ -1,6 +1,9 @@
 /* eslint-disable react/no-direct-mutation-state */
 import { Component } from 'react'
-import { Buttons, Statistics, Section, Notification } from './FeedbackElements'
+import { FeedbackOptions } from './Elements/Buttons'
+import { Statistics } from './Elements/Statistics'
+import { Section } from './Elements/Section'
+import { Notification } from './Elements/Notification'
 
 export class App extends Component {
   state = {
@@ -9,10 +12,16 @@ export class App extends Component {
     bad: 0,
   }
 
-  handleFeedback = (evt) => {
-    this.setState({
-      evt: this.state[evt] += 1,
-    })
+  handleFeedback = (name) => {
+    this.setState(prev =>({
+      [name.name]: prev[name.name] + 1,
+    }))
+  }
+
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state
+    const total = good + neutral + bad
+    return total
   }
 
   countPositiveFeedbackPercentage = () => {
@@ -23,13 +32,13 @@ export class App extends Component {
 
   render() {
     const { good, neutral, bad } = this.state
-    const total = good + neutral + bad
+    const total = this.countTotalFeedback()
     const totalPercentage = this.countPositiveFeedbackPercentage()
 
     return (
       <>
         <Section title="Please leave feedback">
-          <Buttons onFeedback={this.handleFeedback}/>
+          <FeedbackOptions onFeedback={this.handleFeedback} options={Object.keys(this.state)}/>
         </Section>
         <Section title="Statistics">
           {total > 0 ? (
